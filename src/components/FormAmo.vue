@@ -31,8 +31,26 @@ export default {
     };
   },
   methods: {
-    submitForm() {
-      console.log('Отправка данных в AmoCRM', this.formData);
+    async submitForm() {
+      try {
+        const response = await fetch('https://amoconnecttest.amocrm.ru/api/v4/leads', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(this.formData),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          console.log('Данные успешно отправлены в AmoCRM:', data);
+        } else {
+          console.error('Ошибка при отправке данных в AmoCRM:', data.error);
+        }
+      } catch (error) {
+        console.error('Ошибка при отправке данных в AmoCRM:', error.message);
+      }
     },
   },
 };
